@@ -20,35 +20,35 @@ public protocol DownloadServiceProtocol {
     func downloadContent(fromURL: URL, to localURL: URL, completion: @escaping DownloadServiceCompletion) -> DownloadOperationProtocol
 }
 
-public final class DowloadService: DownloadServiceProtocol {
+final class DowloadService: DownloadServiceProtocol {
     fileprivate let operationQueue: OperationQueue
     
-    public init(operationQueue: OperationQueue = .init()) {
+    init(operationQueue: OperationQueue = .init()) {
         self.operationQueue = operationQueue
         self.operationQueue.maxConcurrentOperationCount = 3
     }
     
     @discardableResult
-    public func downloadContent(fromURL: URL, to localURL: URL, completion: @escaping DownloadServiceCompletion) -> DownloadOperationProtocol {
+    func downloadContent(fromURL: URL, to localURL: URL, completion: @escaping DownloadServiceCompletion) -> DownloadOperationProtocol {
         let op = DownloadOperation(fromURL: fromURL, to: localURL, completion: completion)
         operationQueue.addOperation(op)
         return op
     }
 }
 
-public final class DownloadOperation: AsyncOperation {
-    public let fromURL: URL
-    fileprivate let localURL: URL
-    fileprivate let completion: DownloadServiceCompletion
-    fileprivate var downloadTask: URLSessionDownloadTask!
+final class DownloadOperation: AsyncOperation {
+    let fromURL: URL
+    private let localURL: URL
+    private let completion: DownloadServiceCompletion
+    private var downloadTask: URLSessionDownloadTask!
     
-    public init(fromURL: URL, to localURL: URL, completion: @escaping DownloadServiceCompletion) {
+    init(fromURL: URL, to localURL: URL, completion: @escaping DownloadServiceCompletion) {
         self.fromURL = fromURL
         self.localURL = localURL
         self.completion = completion
     }
     
-    public override func main() {
+    override func main() {
         self.downloadTask = URLSession.shared.downloadTask(with: fromURL) { downloadedURL, response, downloadError in
             var completionError: Error?
         
@@ -71,7 +71,7 @@ public final class DownloadOperation: AsyncOperation {
         downloadTask.resume()
     }
     
-    public override func cancel() {
+    override func cancel() {
         downloadTask.cancel()
         super.cancel()
     }

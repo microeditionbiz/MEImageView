@@ -8,7 +8,7 @@
 
 import Foundation
 
-open class AsyncOperation: Operation {
+class AsyncOperation: Operation {
 
     private enum State: String {
         case ready = "isReady"
@@ -27,23 +27,23 @@ open class AsyncOperation: Operation {
         }
     }
     
-    public override var isAsynchronous: Bool {
+    override var isAsynchronous: Bool {
         return true
     }
     
-    public override var isReady: Bool {
+    override var isReady: Bool {
         return state == .ready
     }
     
-    public override var isExecuting: Bool {
+    override var isExecuting: Bool {
         return state == .executing
     }
     
-    public override var isFinished: Bool {
+    override var isFinished: Bool {
         return state == .finished
     }
     
-    public override func start() {
+    override func start() {
         guard !isCancelled else {
             finish()
             return
@@ -54,13 +54,13 @@ open class AsyncOperation: Operation {
         main()
     }
     
-    public func finish() {
+    func finish() {
         if isExecuting {
             state = .finished
         }
     }
     
-    open override func cancel() {
+    override func cancel() {
         super.cancel()
         finish()
     }

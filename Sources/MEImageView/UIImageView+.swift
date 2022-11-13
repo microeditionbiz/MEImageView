@@ -1,5 +1,5 @@
 //
-//  UIIMageView+.swift
+//  UIImageView+.swift
 //  MEImageView
 //
 //  Created by Pablo Ezequiel Romero Giovannoni on 23/11/2019.
@@ -36,13 +36,13 @@ public var CurrentRemoteImageViewConfiguration: RemoteImageViewConfiguration = .
 extension UIImageView {
     
     typealias CompletionClosure = ((URL?, Error?) -> Void)
-    static let spinnerTag = 999
+    static private let spinnerTag = 999
     
-    fileprivate var spinner: UIActivityIndicatorView? {
+    private var spinner: UIActivityIndicatorView? {
         return viewWithTag(Self.spinnerTag) as? UIActivityIndicatorView
     }
     
-    fileprivate var imageURL: URL? {
+    private var imageURL: URL? {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.ImageURL) as? URL
         }
@@ -51,7 +51,7 @@ extension UIImageView {
         }
     }
     
-    func setImageURL(_ url: URL?) {
+    public func setImageURL(_ url: URL?) {
         guard hasToRefreshContent(for: url) else { return }
         cleanCurrentConfiguration()
        
